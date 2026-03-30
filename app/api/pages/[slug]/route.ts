@@ -4,7 +4,15 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll() {},
+      },
+    }
   )
 
   const { slug } = await params

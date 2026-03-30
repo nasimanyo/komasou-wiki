@@ -171,7 +171,7 @@ export default function CreatePage() {
                   onChange={(val) => setContent(val || '')}
                   preview="edit"
                   hideToolbar={false}
-                  visibleDragBar={false}
+                  visibleDragbar={false}
                   className="min-h-[400px]"
                 />
               </div>
