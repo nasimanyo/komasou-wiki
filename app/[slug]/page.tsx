@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import MDEditor from '@uiw/react-md-editor'
 
+export const dynamic = 'force-dynamic'
+
 interface Page {
   id: string
   title: string

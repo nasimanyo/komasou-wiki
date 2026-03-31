@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import MDEditor from '@uiw/react-md-editor'
 
+export const dynamic = 'force-dynamic'
+
 const categories = [
   'コマンド解説',
   'Tips & Tricks',

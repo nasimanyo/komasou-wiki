@@ -3,6 +3,8 @@
 import { createBrowserClient } from '@supabase/ssr'
 import { useRouter } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
+
 export default function Login() {
   const router = useRouter()
 
