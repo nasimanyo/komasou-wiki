@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "コマ相wiki",
-  description: "マイクラコマンド相談所の公式Wiki",
+  description: "マイクラコマンド相談所Wiki",
 };
 
 export default function RootLayout({
