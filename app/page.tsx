@@ -4,6 +4,8 @@ import { createBrowserClient } from '@supabase/ssr'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 interface Page {
   id: string
   title: string
