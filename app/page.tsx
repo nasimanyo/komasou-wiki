@@ -19,13 +19,22 @@ export default function Home() {
   const [user, setUser] = useState<any>(null)
   const [pages, setPages] = useState<Page[]>([])
   const [featuredPages, setFeaturedPages] = useState<Page[]>([])
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
+    // ブラウザ環境でのみSupabaseクライアントを作成
+    if (typeof window !== 'undefined') {
+      const client = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+      setSupabase(client)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return
+
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
@@ -45,6 +54,7 @@ export default function Home() {
   }, [supabase])
 
   const handleLogout = async () => {
+    if (!supabase) return
     await supabase.auth.signOut()
     window.location.href = '/login'
   }
