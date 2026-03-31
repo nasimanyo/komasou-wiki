@@ -41,20 +41,30 @@ export default function PageView() {
   const [editContent, setEditContent] = useState('')
   const [editCategory, setEditCategory] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
+    // ブラウザ環境でのみSupabaseクライアントを作成
+    if (typeof window !== 'undefined') {
+      const client = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+      setSupabase(client)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return
+
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
     }
 
     const getPage = async () => {
-      const response = await fetch(`/api/pages/${params.slug}`)
+      const { slug } = await params
+      const response = await fetch(`/api/pages/${slug}`)
       if (response.ok) {
         const data = await response.json()
         setPage(data)
@@ -68,7 +78,7 @@ export default function PageView() {
 
     getUser()
     getPage()
-  }, [params.slug, supabase, router])
+  }, [params, supabase, router])
 
   const handleEdit = () => {
     setEditing(true)
@@ -76,7 +86,8 @@ export default function PageView() {
 
   const handleSave = async () => {
     setLoading(true)
-    const response = await fetch(`/api/pages/${params.slug}`, {
+    const { slug } = await params
+    const response = await fetch(`/api/pages/${slug}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -95,7 +106,8 @@ export default function PageView() {
 
   const handleDelete = async () => {
     if (confirm('本当に削除しますか？')) {
-      const response = await fetch(`/api/pages/${params.slug}`, {
+      const { slug } = await params
+      const response = await fetch(`/api/pages/${slug}`, {
         method: 'DELETE',
       })
       if (response.ok) {

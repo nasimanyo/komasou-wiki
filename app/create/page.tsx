@@ -24,14 +24,23 @@ export default function CreatePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [user, setUser] = useState<any>(null)
+  const [supabase, setSupabase] = useState<any>(null)
   const router = useRouter()
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  useEffect(() => {
+    // ブラウザ環境でのみSupabaseクライアントを作成
+    if (typeof window !== 'undefined') {
+      const client = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+      setSupabase(client)
+    }
+  }, [])
 
   useEffect(() => {
+    if (!supabase) return
+
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
